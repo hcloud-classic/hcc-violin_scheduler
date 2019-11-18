@@ -7,7 +7,7 @@ import (
 )
 
 var conf = goconf.New()
-var config = violinConfig{}
+var config = schedulerConfig{}
 var err error
 
 func parseMysql() {
