@@ -38,20 +38,20 @@ go_report:
 #  only:
 #  - master
 
-#lint_code:
-#  stage: test
-#  script:
-#    - gmake lint_dep
-#    - gmake lint
+lint_code:
+ stage: test
+ script:
+   - gmake lint_dep
+   - gmake lint
 
 build:
   stage: build
   script:
-    # - gmake
-    # - sudo ezjail-admin stop violin_scheduler
-    # - sudo cp $PWD/violin_scheduler /usr/jails/basejail/bin/
-    # - sudo chmod 755 /usr/jails/basejail/bin/violiviolin_schedulern
-    # - sudo ezjail-admin start violin_scheduler &
+    - gmake
+    - sudo ezjail-admin stop violin_scheduler
+    - sudo cp $PWD/violin_scheduler /usr/jails/basejail/bin/
+    - sudo chmod 755 /usr/jails/basejail/bin/violin_scheduler
+    - sudo ezjail-admin start violin_scheduler &
     - echo "Finished"
 #  only:
 #  - master
