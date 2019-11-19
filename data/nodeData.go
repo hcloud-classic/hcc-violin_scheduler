@@ -8,10 +8,3 @@ type ListNodeData struct {
 		ListNode []model.Node `json:"all_node"`
 	} `json:"data"`
 }
-
-//SelectedNodeData : Selected nodes
-type SelectedNodeData struct {
-	Data struct {
-		ListNode []model.Nodes `json:"all_node"`
-	} `json:"data"`
-}

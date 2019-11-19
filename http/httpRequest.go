@@ -3,7 +3,6 @@ package http
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	violinSchedulerData "hcc/violin-scheduler/data"
 	"hcc/violin-scheduler/lib/config"
 	"io/ioutil"
@@ -57,7 +56,7 @@ func DoHTTPRequest(moduleName string, needData bool, data interface{}, query str
 				case "flute":
 					listNodeData := data.(violinSchedulerData.ListNodeData)
 					err = json.Unmarshal([]byte(result), &(listNodeData))
-					fmt.Println("listNodeData: ", listNodeData)
+					// fmt.Println("listNodeData: ", listNodeData)
 
 					if err != nil {
 						return nil, err
