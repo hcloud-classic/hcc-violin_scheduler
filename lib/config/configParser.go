@@ -89,12 +89,40 @@ func parseRabbitMQ() {
 	}
 }
 
+func parseFlute() {
+	config.FluteConfig = conf.Get("flute")
+	if config.FluteConfig == nil {
+		logger.Logger.Panicln("no flute section")
+	}
+
+	Flute = flute{}
+	Flute.ServerAddress, err = config.FluteConfig.String("flute_server_address")
+	if err != nil {
+		logger.Logger.Panicln(err)
+	}
+
+	Flute.ServerPort, err = config.FluteConfig.Int("flute_server_port")
+	if err != nil {
+		logger.Logger.Panicln(err)
+	}
+
+	Flute.RequestTimeoutMs, err = config.FluteConfig.Int("flute_request_timeout_ms")
+	if err != nil {
+		logger.Logger.Panicln(err)
+	}
+
+	Flute.WaitForLeaderNodeTimeoutSec, err = config.FluteConfig.Int("flute_wait_for_leader_node_timeout_sec")
+	if err != nil {
+		logger.Logger.Panicln(err)
+	}
+}
+
 // Parser : Parse config file
 func Parser() {
 	if err = conf.Parse(configLocation); err != nil {
 		logger.Logger.Panicln(err)
 	}
-
+	parseFlute()
 	parseMysql()
 	parseHTTP()
 	parseRabbitMQ()

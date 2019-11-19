@@ -1,6 +1,7 @@
 package graphql
 
 import (
+	"errors"
 	graphqlType "hcc/violin-scheduler/action/graphql/type"
 	"hcc/violin-scheduler/lib/logger"
 
@@ -11,8 +12,8 @@ var queryTypes = graphql.NewObject(
 	graphql.ObjectConfig{
 		Name: "Query",
 		Fields: graphql.Fields{
-
-			"selected_nodes": &graphql.Field{
+			// server DB
+			"server": &graphql.Field{
 				Type:        graphqlType.ServerType,
 				Description: "Get server by uuid",
 				Args: graphql.FieldConfigArgument{
@@ -22,7 +23,8 @@ var queryTypes = graphql.NewObject(
 				},
 				Resolve: func(params graphql.ResolveParams) (interface{}, error) {
 					logger.Logger.Println("Resolving: server")
-					return xxx
+					// return dao.ReadServer(params.Args)
+					return "codex", errors.New("asdasd")
 				},
 			},
 		},

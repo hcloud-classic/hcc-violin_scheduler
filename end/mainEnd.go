@@ -2,7 +2,6 @@ package end
 
 // MainEnd : Main ending function
 func MainEnd() {
-	rabbitmqEnd()
-	mysqlEnd()
+	// mysqlEnd()
 	loggerEnd()
 }

@@ -40,6 +40,9 @@ var ServerType = graphql.NewObject(
 			"created_at": &graphql.Field{
 				Type: graphql.DateTime,
 			},
+			"number_of_nodes": &graphql.Field{
+				Type: graphql.Int,
+			},
 		},
 	},
 )

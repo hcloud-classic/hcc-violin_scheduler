@@ -1,11 +1,11 @@
 package main
 
 import (
+	"hcc/violin-scheduler/action/graphql"
 	schedulerEnd "hcc/violin-scheduler/end"
 	schedulerInit "hcc/violin-scheduler/init"
-	"hcc/violin/action/graphql"
-	"hcc/violin/lib/config"
-	"hcc/violin/lib/logger"
+	"hcc/violin-scheduler/lib/config"
+	"hcc/violin-scheduler/lib/logger"
 	"net/http"
 	"strconv"
 )
