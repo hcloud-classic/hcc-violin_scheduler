@@ -49,7 +49,7 @@ build:
   script:
     - gmake
     - sudo ezjail-admin stop violin_scheduler
-    - sudo cp $PWD/violin_scheduler /usr/jails/basejail/bin/
+    - sudo cp $PWD/violin-scheduler /usr/jails/basejail/bin/
     - sudo chmod 755 /usr/jails/basejail/bin/violin_scheduler
     - sudo ezjail-admin start violin_scheduler &
     - echo "Finished"
