@@ -8,3 +8,9 @@ type ListNodeData struct {
 		ListNode []model.Node `json:"all_node"`
 	} `json:"data"`
 }
+
+type ScheduledNodeData struct {
+	Data struct {
+		ScheduledNode model.ScheduledNodes `json:"schedule_nodes"`
+	} `json:"data"`
+}

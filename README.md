@@ -6,6 +6,12 @@
 [![go report](http://118.130.73.5:8100/iitp-sds/hcloud-badge/raw/feature/dev/hcloud-badge_violin-scheduler.svg)](http://118.130.73.5:8100/iitp-sds/hcloud-badge/raw/feature/dev/goreport_violin-scheduler)
 
 
+
+
 # violin-scheduler
 
 노드 선택 스케줄러
+
+## GraphQL
+
+### querytype

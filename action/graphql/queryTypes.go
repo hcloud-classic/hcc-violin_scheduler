@@ -24,7 +24,7 @@ var queryTypes = graphql.NewObject(
 				Resolve: func(params graphql.ResolveParams) (interface{}, error) {
 					logger.Logger.Println("Resolving: server")
 					// return dao.ReadServer(params.Args)
-					return "codex", errors.New("asdasd")
+					return "Not Use This", errors.New("Not Used")
 				},
 			},
 		},

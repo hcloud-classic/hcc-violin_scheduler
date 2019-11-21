@@ -25,21 +25,18 @@ var mutationTypes = graphql.NewObject(graphql.ObjectConfig{
 				"memory": &graphql.ArgumentConfig{
 					Type: graphql.Int,
 				},
-				"number_of_nodes": &graphql.ArgumentConfig{
+				"nr_node": &graphql.ArgumentConfig{
 					Type: graphql.Int,
-				},
-				"list_node": &graphql.ArgumentConfig{
-					Type: graphql.String,
 				},
 			},
 			Resolve: func(params graphql.ResolveParams) (interface{}, error) {
 				logger.Logger.Println("Resolving: schedule_nodes")
-				return driver.ScheduleNodes(params)
+				return driver.ScheduleNodes(params.Args)
 			},
 		},
 
 		"selected_nodes": &graphql.Field{
-			Type:        graphql.String,
+			Type:        graphql.NewList(graphql.String),
 			Description: "Scheduling Nodes",
 			Args: graphql.FieldConfigArgument{
 				"server_uuid": &graphql.ArgumentConfig{
@@ -51,16 +48,13 @@ var mutationTypes = graphql.NewObject(graphql.ObjectConfig{
 				"memory": &graphql.ArgumentConfig{
 					Type: graphql.Int,
 				},
-				"number_of_nodes": &graphql.ArgumentConfig{
+				"nr_node": &graphql.ArgumentConfig{
 					Type: graphql.Int,
-				},
-				"list_node": &graphql.ArgumentConfig{
-					Type: graphql.String,
 				},
 			},
 			Resolve: func(params graphql.ResolveParams) (interface{}, error) {
 				logger.Logger.Println("Resolving: schedule_nodes")
-				return driver.ScheduleNodes(params)
+				return driver.TestSchedule(params.Args)
 			},
 		},
 	},
