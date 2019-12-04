@@ -1,0 +1,41 @@
+mutation _ {
+  schedule_nodes(server_uuid: "qweqweqweqwe", cpu: 1, memory: 4, user_uuid: "1234",number_of_nodes: 4) {
+    server_uuid
+    cpu
+    memory
+    user_uuid
+    number_of_nodes
+  }
+}
+
+
+// selected nodes uuid list return
+//Json Type
+mutation _ {
+  schedule_nodes(server_uuid: "qweqweqweqwe", cpu: 0, memory: 0, nr_node: 2) {
+    node_uuid
+  }
+}
+
+
+//String type
+mutation _ {
+	selected_nodes (server_uuid: "qweqweqweqwe", cpu: 0, memory: 0, nr_node: 2)
+}
+
+
+
+[flute]
+query {
+  all_node{
+    uuid
+    bmc_mac_addr
+    pxe_mac_addr
+    bmc_ip
+    status
+    cpu_cores
+    memory
+    created_at
+    active
+  }
+}
