@@ -11,32 +11,24 @@
 ## 개발 현황
 
 ```shell
-
+Rack Awareness 를 고려한 알고리즘은 아니기 때문에 단일 Rack에서의 노드 선택 알고리즘이다. 추후 복수의 Rack을 고려한 알고리즘은 위해 가중치를 계산식을 구축해야 한다. 
 ```
 
 
-
-노드 선택 스케줄러
 
 ### 노드 스케쥴러 알고리즘 이란?
 
 ### 알고리즘 순서도
 
-![NodeSelectAlgo](assets/NodeSelectAlgo.svg)
-
-
-
-
+![Schduler_Algo](assets/Schduler_Algo.png)
 
 ### 알고리즘 예시 1
 
-![Exam1](assets/Exam1.svg)
-
-
+![Exam_nodeselect](assets/Exam_nodeselect.png)
 
 ### 알고리즘 예시 2
 
-![Exam2](assets/Exam2.svg)
+![Exam_Quotaselect](assets/Exam_Quotaselect.png)
 
 ## GraphQL
 
