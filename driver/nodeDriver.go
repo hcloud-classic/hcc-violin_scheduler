@@ -9,6 +9,7 @@ import (
 func AllNodes() (interface{}, error) {
 	query := "query {\n" +
 		"	all_node {\n" +
+		"		server_uuid\n" +
 		"		uuid\n" +
 		"		bmc_mac_addr\n" +
 		"		bmc_ip\n" +
@@ -24,7 +25,6 @@ func AllNodes() (interface{}, error) {
 	var listNodeData data.ListNodeData
 
 	result, err := http.DoHTTPRequest("flute", true, listNodeData, query)
-
 	if err != nil {
 		return listNodeData, err
 	}

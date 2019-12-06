@@ -48,9 +48,8 @@ func NodeListParser(nodes []model.Node, userquota model.Quota) ([]string, error)
 	var nodeT = map[int]*nodeInfo{}
 	// logger.Logger.Println("nodeListParser : \n", nodes)
 	for index := 0; index < len(nodes); index++ {
-		// logger.Logger.Println("#### : ", nodes[index])
 		// Later, Please Check Selected node limit equal or less than nodecount
-		if nodes[index].Active == 0 {
+		if nodes[index].Active == 0 && nodes[index].ServerUUID == "" {
 			SetValue(nodeT, nodes[index].UUID, (nodes[index].CPUCores)*2, nodes[index].Memory, nodecount, IPsplitToInt(nodes[index].BmcIP))
 			nodecount++
 		}

@@ -4,6 +4,7 @@ import "time"
 
 // Node : Struct of node
 type Node struct {
+	ServerUUID  string    `json:"server_uuid"`
 	UUID        string    `json:"uuid"`
 	BmcMacAddr  string    `json:"bmc_mac_addr"`
 	BmcIP       string    `json:"bmc_ip"`
