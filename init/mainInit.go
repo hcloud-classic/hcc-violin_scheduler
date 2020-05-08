@@ -1,33 +1,20 @@
-package main
+package init
 
-import (
-	"hcc/violin-scheduler/action/graphql"
-	schedulerEnd "hcc/violin-scheduler/end"
-	schedulerInit "hcc/violin-scheduler/init"
-	"hcc/violin-scheduler/lib/config"
-	"hcc/violin-scheduler/lib/logger"
-	"net/http"
-	"strconv"
-)
+import "hcc/violin-scheduler/lib/config"
 
-func init() {
-	err := schedulerInit.MainInit()
+// MainInit : Main initialization function
+func MainInit() error {
+	err := syscheckInit()
 	if err != nil {
-		panic(err)
+		return err
 	}
-}
 
-func main() {
-	defer func() {
-		schedulerEnd.MainEnd()
-	}()
-
-	http.Handle("/graphql", graphql.GraphqlHandler)
-	logger.Logger.Println("Opening server on port " + strconv.Itoa(int(config.HTTP.Port)) + "...")
-	err := http.ListenAndServe(":"+strconv.Itoa(int(config.HTTP.Port)), nil)
+	err = loggerInit()
 	if err != nil {
-		logger.Logger.Println(err)
-		logger.Logger.Println("Failed to prepare http server!")
-		return
+		return err
 	}
+
+	config.Parser()
+
+	return nil
 }
