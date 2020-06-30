@@ -4,6 +4,8 @@ import (
 	"hcc/violin-scheduler/lib/logger"
 	"hcc/violin-scheduler/model"
 	"sort"
+	"strconv"
+	"strings"
 )
 
 // If user want specified CPU,MEM or the number of nodes,
@@ -67,4 +69,20 @@ func NodeListParser(nodes []model.Node, userquota model.Quota) ([]string, error)
 	}
 	logger.Logger.Println("Server Scheduled : ", seletedNodeList)
 	return seletedNodeList, nil
+}
+
+func IPsplitToInt(ip string) int {
+	tmptp := strings.Split(ip, ".")
+	if len(tmptp) == 4 {
+		intIP, err := strconv.Atoi(tmptp[3])
+		if err != nil {
+			return 0
+		}
+		return intIP
+	}
+	return 0
+}
+
+func SetValue(nodemap map[int]*nodeInfo, UUID string, cpus int, mems int, Index int, bmcip int) {
+	nodemap[Index] = &nodeInfo{NodeUUID: UUID, CPU: cpus, Mem: mems, NodeOrder: bmcip}
 }
