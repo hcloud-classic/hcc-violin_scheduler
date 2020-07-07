@@ -1,6 +1,7 @@
 package scheduler
 
 import (
+	"errors"
 	"hcc/violin-scheduler/lib/logger"
 	"hcc/violin-scheduler/model"
 	"sort"
@@ -85,4 +86,42 @@ func IPsplitToInt(ip string) int {
 
 func SetValue(nodemap map[int]*nodeInfo, UUID string, cpus int, mems int, Index int, bmcip int) {
 	nodemap[Index] = &nodeInfo{NodeUUID: UUID, CPU: cpus, Mem: mems, NodeOrder: bmcip}
+}
+
+func InputTest(nodemap []*nodeInfo) ([]string, error) {
+	var seletedNodeList []string
+	logger.Logger.Println("Appending Selected nodes")
+	for a, b := range nodemap {
+		seletedNodeList = append(seletedNodeList, b.NodeUUID)
+		logger.Logger.Println(a, *b)
+	}
+	return seletedNodeList, nil
+}
+
+func SelectorInit(nodemap []*nodeInfo, userquota model.Quota) ([]string, error) {
+
+	tmpmap := BuildSliceInit(userquota.NumberOfNodes)
+	checkPathStatus.CPU = userquota.CPU
+	checkPathStatus.Mem = userquota.Memory
+	checkPathStatus.Depth = userquota.NumberOfNodes
+	checkPathStatus.IsFind = false
+	SearchPath(nodemap, tmpmap, 0, 0, 0)
+	var nodeUUIDs []string
+
+	if checkPathStatus.IsFind {
+		for index := 0; index < len(checkPathStatus.NavigatePath); index++ {
+			nodeUUIDs = append(nodeUUIDs, nodemap[checkPathStatus.NavigatePath[index]].NodeUUID)
+		}
+	} else {
+		return nodeUUIDs, errors.New("Not Satisfing Node")
+	}
+	ResetGlobalVal()
+	return nodeUUIDs, nil
+}
+func BuildSliceInit(size int) *[]int {
+	dp := make([]int, size)
+	for i := 0; i < len(dp); i++ {
+		dp[i] = 0
+	}
+	return &dp
 }
