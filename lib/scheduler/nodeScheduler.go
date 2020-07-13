@@ -160,3 +160,11 @@ func SearchPath(nodemap []*nodeInfo, path *[]int, cpu int, mem int, depth int) {
 	}
 
 }
+
+func ResetGlobalVal() {
+	checkPathStatus.CPU = 0
+	checkPathStatus.Mem = 0
+	checkPathStatus.Depth = 0
+	checkPathStatus.IsFind = false
+	checkPathStatus.NavigatePath = checkPathStatus.NavigatePath[:0]
+}
