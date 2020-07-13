@@ -125,3 +125,17 @@ func BuildSliceInit(size int) *[]int {
 	}
 	return &dp
 }
+
+func IsoptimizedPath(cpu int, mem int, depth int) bool {
+	if (cpu == checkPathStatus.CPU && mem == checkPathStatus.Mem && checkPathStatus.IsFind == false) || (checkPathStatus.CPU == 0 && checkPathStatus.Mem == 0 && checkPathStatus.Depth == depth) {
+		checkPathStatus.IsFind = true
+		return true
+	}
+	return false
+}
+func IsvaildQuota(cpu int, mem int, depth int) bool {
+	if (cpu <= checkPathStatus.CPU && mem <= checkPathStatus.Mem && depth <= checkPathStatus.Depth) || (checkPathStatus.CPU == 0 && checkPathStatus.Mem == 0 && depth <= checkPathStatus.Depth) {
+		return true
+	}
+	return false
+}
