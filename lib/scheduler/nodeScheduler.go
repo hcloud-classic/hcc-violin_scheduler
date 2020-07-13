@@ -139,3 +139,24 @@ func IsvaildQuota(cpu int, mem int, depth int) bool {
 	}
 	return false
 }
+
+func SearchPath(nodemap []*nodeInfo, path *[]int, cpu int, mem int, depth int) {
+	if !checkPathStatus.IsFind {
+		for index := 0; index < len(*path); index++ {
+			if (*path)[index] != 1 && IsvaildQuota(cpu+nodemap[index].CPU, mem+nodemap[index].Mem, depth+1) {
+				(*path)[index] = 1
+				if IsoptimizedPath(cpu+nodemap[index].CPU, mem+nodemap[index].Mem, depth+1) {
+					for triumphNumber := 0; triumphNumber < len(*path); triumphNumber++ {
+						if (*path)[triumphNumber] == 1 {
+							checkPathStatus.NavigatePath = append(checkPathStatus.NavigatePath, triumphNumber)
+						}
+					}
+					break
+				}
+				SearchPath(nodemap, path, cpu+nodemap[index].CPU, mem+nodemap[index].Mem, depth+1)
+				(*path)[index] = 0
+			}
+		}
+	}
+
+}
