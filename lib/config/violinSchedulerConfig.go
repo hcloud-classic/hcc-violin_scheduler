@@ -9,6 +9,7 @@ type schedulerConfig struct {
 	HTTPConfig     *goconf.Section
 	RabbitMQConfig *goconf.Section
 	FluteConfig    *goconf.Section
+	GrpcConfig     *goconf.Section
 }
 
 /*-----------------------------------

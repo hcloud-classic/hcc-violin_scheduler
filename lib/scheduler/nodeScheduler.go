@@ -46,7 +46,7 @@ func (a Weighting) Less(i, j int) bool { return a[i].NodeOrder < a[j].NodeOrder 
 func NodeListParser(nodes []model.Node, userquota model.Quota) ([]string, error) {
 	var nodecount int = 0
 	var nodeT = map[int]*nodeInfo{}
-	// logger.Logger.Println("nodeListParser : \n", nodes)
+	logger.Logger.Println("nodeListParser (%d): \n", len(nodes), nodes)
 	for index := 0; index < len(nodes); index++ {
 		// Later, Please Check Selected node limit equal or less than nodecount
 		if nodes[index].Active == 0 && nodes[index].ServerUUID == "" {
@@ -59,9 +59,9 @@ func NodeListParser(nodes []model.Node, userquota model.Quota) ([]string, error)
 	if userquota.NumberOfNodes == 0 {
 		userquota.NumberOfNodes = nodecount + 1
 	}
-	// for i, words := range nodeT {
-	// 	logger.Logger.Println(i, words.NodeUUID)
-	// }
+	for i, words := range nodeT {
+		logger.Logger.Println(i, words.NodeUUID)
+	}
 
 	tmparr := make([]*nodeInfo, 0, len(nodeT))
 	//*******Debug*******
@@ -71,9 +71,9 @@ func NodeListParser(nodes []model.Node, userquota model.Quota) ([]string, error)
 		tmparr = append(tmparr, eachNode)
 	}
 	// *******************
-	// for a, b := range tmparr {
-	// 	logger.Logger.Println("Comp :", a, *b)
-	// }
+	for a, b := range tmparr {
+		logger.Logger.Println("Comp :", a, *b)
+	}
 	//Sort bmp end of ip by Descending order
 	sort.Sort(Weighting(tmparr))
 
@@ -127,7 +127,8 @@ func AllNodeClustering(numberOfNodes int, ServerUUID string) {
 
 }
 
-// CPUFritst : asd
+// To-Do : Select Cpu first
+// CPUFritst
 func CPUFritst() {
 
 }
@@ -149,12 +150,12 @@ func SelectorInit(nodemap []*nodeInfo, userquota model.Quota) ([]string, error) 
 	tmpmap := BuildSliceInit(userquota.NumberOfNodes)
 
 	//*******Debug*******
-	// for a, b := range *tmpmap {
-	// 	logger.Logger.Println(a, b)
-	// }
-	// for a, b := range nodemap {
-	// 	logger.Logger.Println("a: ", a, "|| b : ", *b)
-	// }
+	for a, b := range *tmpmap {
+		logger.Logger.Println("tmpmap => ", a, b)
+	}
+	for a, b := range nodemap {
+		logger.Logger.Println("a: ", a, "|| b : ", *b)
+	}
 	// *******************
 
 	//To-Do : checkPathStatus.CPU  and checkPathStatus.Mem is filed nodemap cpu mem
@@ -203,14 +204,17 @@ func IsvaildQuota(cpu int, mem int, depth int) bool {
 	return false
 }
 
+// SearchPath : visit Abailable nodes and Check out that The  node is Satisfy with quota
 func SearchPath(nodemap []*nodeInfo, path *[]int, cpu int, mem int, depth int) {
 	if !checkPathStatus.IsFind {
-		for index := 0; index < len(*path); index++ {
+		for index := 0; index < len(nodemap); index++ {
 			if (*path)[index] != 1 && IsvaildQuota(cpu+nodemap[index].CPU, mem+nodemap[index].Mem, depth+1) {
 				(*path)[index] = 1
+				//Debug
 				// fmt.Printf("cpu[%d] mem[%d] depth[%d]\n", cpu, mem, depth)
 				// fmt.Printf("index[%d]=>cpu[%d] map.cpu[%d] || mem[%d] map.mem[%d] || depth[%d]\n", index, cpu+nodemap[index].CPU, nodemap[index].CPU, mem+nodemap[index].Mem, nodemap[index].Mem, depth)
 				// logger.Logger.Println("Processing : indes[", index, "]", (*path)[index])
+				//Debug
 				if IsoptimizedPath(cpu+nodemap[index].CPU, mem+nodemap[index].Mem, depth+1) {
 					for triumphNumber := 0; triumphNumber < len(*path); triumphNumber++ {
 						if (*path)[triumphNumber] == 1 {

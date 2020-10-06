@@ -43,6 +43,7 @@ func parseMysql() {
 	}
 }
 
+//Will be Deprecated
 func parseHTTP() {
 	config.HTTPConfig = conf.Get("http")
 	if config.HTTPConfig == nil {
@@ -117,6 +118,18 @@ func parseFlute() {
 	}
 }
 
+func parseGrpc() {
+	config.GrpcConfig = conf.Get("grpc")
+	if config.GrpcConfig == nil {
+		logger.Logger.Panicln("no grpc section")
+	}
+
+	Grpc.Port, err = config.GrpcConfig.Int("port")
+	if err != nil {
+		logger.Logger.Panicln(err)
+	}
+}
+
 // Parser : Parse config file
 func Parser() {
 	if err = conf.Parse(configLocation); err != nil {
@@ -124,6 +137,7 @@ func Parser() {
 	}
 	parseFlute()
 	parseMysql()
-	parseHTTP()
-	parseRabbitMQ()
+	// parseHTTP()
+	// parseRabbitMQ()
+	parseGrpc()
 }
