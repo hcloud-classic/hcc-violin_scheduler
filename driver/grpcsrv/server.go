@@ -31,7 +31,7 @@ func reformatStringListToPBNodes(nodesList []string) *pb.ScheduledNodes {
 
 	for i, args := range nodesList {
 		pbNodePtr[i] = new(pb.Node)
-		pbNodePtr[i].ServerUUID = args
+		pbNodePtr[i].UUID = args
 
 	}
 	// fmt.Println("Second Debug : \n", pbNodePtr)

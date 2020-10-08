@@ -207,7 +207,7 @@ func IsvaildQuota(cpu int, mem int, depth int) bool {
 // SearchPath : visit Abailable nodes and Check out that The  node is Satisfy with quota
 func SearchPath(nodemap []*nodeInfo, path *[]int, cpu int, mem int, depth int) {
 	if !checkPathStatus.IsFind {
-		for index := 0; index < len(nodemap); index++ {
+		for index := 0; index < len(*path); index++ {
 			if (*path)[index] != 1 && IsvaildQuota(cpu+nodemap[index].CPU, mem+nodemap[index].Mem, depth+1) {
 				(*path)[index] = 1
 				//Debug
