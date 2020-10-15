@@ -46,7 +46,7 @@ func (a Weighting) Less(i, j int) bool { return a[i].NodeOrder < a[j].NodeOrder 
 func NodeListParser(nodes []model.Node, userquota model.Quota) ([]string, error) {
 	var nodecount int = 0
 	var nodeT = map[int]*nodeInfo{}
-	logger.Logger.Println("nodeListParser (%d): \n", len(nodes), nodes)
+	// logger.Logger.Println("nodeListParser (%d): \n", len(nodes), nodes)
 	for index := 0; index < len(nodes); index++ {
 		// Later, Please Check Selected node limit equal or less than nodecount
 		if nodes[index].Active == 0 && nodes[index].ServerUUID == "" {
@@ -66,14 +66,14 @@ func NodeListParser(nodes []model.Node, userquota model.Quota) ([]string, error)
 	tmparr := make([]*nodeInfo, 0, len(nodeT))
 	//*******Debug*******
 	// logger.Logger.Println("nodes : ", nodes)
-	for _, eachNode := range nodeT {
-		// logger.Logger.Println("a : ", a, "eachNode : ", eachNode)
-		tmparr = append(tmparr, eachNode)
-	}
+	// for _, eachNode := range nodeT {
+	// 	// logger.Logger.Println("a : ", a, "eachNode : ", eachNode)
+	// 	tmparr = append(tmparr, eachNode)
+	// }
 	// *******************
-	for a, b := range tmparr {
-		logger.Logger.Println("Comp :", a, *b)
-	}
+	// for a, b := range tmparr {
+	// 	logger.Logger.Println("Comp :", a, *b)
+	// }
 	//Sort bmp end of ip by Descending order
 	sort.Sort(Weighting(tmparr))
 

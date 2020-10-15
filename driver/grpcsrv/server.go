@@ -8,8 +8,6 @@ import (
 	"hcc/violin-scheduler/lib/logger"
 	"hcc/violin-scheduler/lib/scheduler"
 	"hcc/violin-scheduler/model"
-	"sort"
-	"strconv"
 	"time"
 )
 
@@ -62,7 +60,6 @@ func reformatNodeListToPBNodes(nodesList *model.Nodes) *pb.ScheduledNodes {
 
 func reformatPBNodesToModelNodes(pbNodes []pb.Node) []model.Node {
 	var nodes []model.Node
-	fmt.Println("reformatPBNodesToModelNodes")
 
 	for _, args := range pbNodes {
 		if args.CPUCores > 0 || args.Memory > 0 || args.BmcIP != "" {
@@ -104,13 +101,13 @@ func SchedulHandler(contents *pb.ReqScheduleHandler) (*pb.ScheduledNodes, *hccer
 
 	modelNodes := reformatPBNodesToModelNodes(pbNodes)
 
-	sort.Slice(modelNodes, func(i, j int) bool {
+	// sort.Slice(modelNodes, func(i, j int) bool {
 
-		a, _ := strconv.Atoi(modelNodes[i].BmcIP)
-		b, _ := strconv.Atoi(modelNodes[j].BmcIP)
-
-		return a < b
-	})
+	// 	a, _ := strconv.Atoi(modelNodes[i].BmcIP)
+	// 	b, _ := strconv.Atoi(modelNodes[j].BmcIP)
+	// 	fmt.Println("comp : ", a, "<>", b)
+	// 	return a < b
+	// })
 
 	for _, args := range pbNodes {
 		fmt.Println(args.BmcIP, "\n", args.BmcMacAddr)
