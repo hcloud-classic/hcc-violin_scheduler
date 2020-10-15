@@ -58,19 +58,22 @@ func (rc *RPCClient) GetNodeList() ([]rpcflute.Node, error) {
 	}
 
 	for _, pnode := range pnodeList.Node {
-		nodeList = append(nodeList, rpcflute.Node{
-			UUID:        pnode.UUID,
-			ServerUUID:  pnode.ServerUUID,
-			BmcMacAddr:  pnode.BmcMacAddr,
-			BmcIP:       pnode.BmcIP,
-			PXEMacAddr:  pnode.PXEMacAddr,
-			Status:      pnode.Status,
-			CPUCores:    pnode.CPUCores,
-			Memory:      pnode.Memory,
-			Description: pnode.Description,
-			Active:      pnode.Active,
-			CreatedAt:   pnode.CreatedAt,
-		})
+		if pnode.UUID != "" {
+			nodeList = append(nodeList, rpcflute.Node{
+				UUID:        pnode.UUID,
+				ServerUUID:  pnode.ServerUUID,
+				BmcMacAddr:  pnode.BmcMacAddr,
+				BmcIP:       pnode.BmcIP,
+				PXEMacAddr:  pnode.PXEMacAddr,
+				Status:      pnode.Status,
+				CPUCores:    pnode.CPUCores,
+				Memory:      pnode.Memory,
+				Description: pnode.Description,
+				Active:      pnode.Active,
+				CreatedAt:   pnode.CreatedAt,
+			})
+		}
+
 	}
 
 	return nodeList, nil

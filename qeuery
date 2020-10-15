@@ -10,6 +10,18 @@
 }
 
 
+{
+  "server": {
+    "scheduleServer": {
+      "UUID": "codex",
+      "CPU": 144,
+      "memory": 512,
+      "userUUID": "ubuntu"
+    },
+    "numOfNodes": 2
+  }
+}
+
 mutation _ {
   schedule_nodes(server_uuid: "qweqweqweqwe", cpu: 1, memory: 4, user_uuid: "1234",number_of_nodes: 4) {
     server_uuid

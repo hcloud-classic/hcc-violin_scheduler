@@ -147,7 +147,7 @@ func printMap(args map[int]*nodeInfo) {
 func SelectorInit(nodemap []*nodeInfo, userquota model.Quota) ([]string, error) {
 
 	// To-Do :BuildSliceInit input argument is the number of selectable nodes
-	tmpmap := BuildSliceInit(userquota.NumberOfNodes)
+	tmpmap := BuildSliceInit(len(nodemap))
 
 	//*******Debug*******
 	for a, b := range *tmpmap {
@@ -175,6 +175,7 @@ func SelectorInit(nodemap []*nodeInfo, userquota model.Quota) ([]string, error) 
 		}
 	} else {
 		// logger.Logger.Println("Not Satisfing Node")
+
 		return nodeUUIDs, errors.New("Not Satisfing Node")
 	}
 	// logger.Logger.Println("Debug : ", nodeUUIDs)
@@ -207,7 +208,8 @@ func IsvaildQuota(cpu int, mem int, depth int) bool {
 // SearchPath : visit Abailable nodes and Check out that The  node is Satisfy with quota
 func SearchPath(nodemap []*nodeInfo, path *[]int, cpu int, mem int, depth int) {
 	if !checkPathStatus.IsFind {
-		for index := 0; index < len(*path); index++ {
+		for index := 0; index < len(nodemap); index++ {
+			// if index < len(*path) && ((*path)[index] != 1 && IsvaildQuota(cpu+nodemap[index].CPU, mem+nodemap[index].Mem, depth+1)) {
 			if (*path)[index] != 1 && IsvaildQuota(cpu+nodemap[index].CPU, mem+nodemap[index].Mem, depth+1) {
 				(*path)[index] = 1
 				//Debug

@@ -21,13 +21,12 @@
 package rpcviolin_scheduler
 
 import (
-	rpcmsgType "hcc/violin-scheduler/action/grpc/pb/rpcmsgType"
-	reflect "reflect"
-	sync "sync"
-
 	proto "github.com/golang/protobuf/proto"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	rpcmsgType "hcc/violin-scheduler/action/grpc/pb/rpcmsgType"
+	reflect "reflect"
+	sync "sync"
 )
 
 const (

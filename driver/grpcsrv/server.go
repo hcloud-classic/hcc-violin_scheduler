@@ -1,12 +1,15 @@
 package grpcsrv
 
 import (
+	"fmt"
 	"hcc/violin-scheduler/action/grpc/client"
 	pb "hcc/violin-scheduler/action/grpc/pb/rpcviolin_scheduler"
 	hccerr "hcc/violin-scheduler/lib/errors"
 	"hcc/violin-scheduler/lib/logger"
 	"hcc/violin-scheduler/lib/scheduler"
 	"hcc/violin-scheduler/model"
+	"sort"
+	"strconv"
 	"time"
 )
 
@@ -26,6 +29,7 @@ func reformatPBScheduleServerToModeQuota(pbServer *pb.ScheduleServer, userQuota 
 	userQuota.UserUUID = parsePb.GetUserUUID()
 	userQuota.NumberOfNodes = int(pbServer.GetNumOfNodes())
 }
+
 func reformatStringListToPBNodes(nodesList []string) *pb.ScheduledNodes {
 	pbNodePtr := make([]*pb.Node, len(nodesList))
 
@@ -58,13 +62,18 @@ func reformatNodeListToPBNodes(nodesList *model.Nodes) *pb.ScheduledNodes {
 
 func reformatPBNodesToModelNodes(pbNodes []pb.Node) []model.Node {
 	var nodes []model.Node
+	fmt.Println("reformatPBNodesToModelNodes")
+
 	for _, args := range pbNodes {
-		nodes = append(nodes, model.Node{
-			ServerUUID: args.ServerUUID,
-			UUID:       args.UUID,
-			CPUCores:   int(args.CPUCores),
-			Memory:     int(args.Memory),
-		})
+		if args.CPUCores > 0 || args.Memory > 0 || args.BmcIP != "" {
+			nodes = append(nodes, model.Node{
+				ServerUUID: args.ServerUUID,
+				UUID:       args.UUID,
+				CPUCores:   int(args.CPUCores),
+				Memory:     int(args.Memory),
+				BmcIP:      args.BmcIP,
+			})
+		}
 	}
 	return nodes
 }
@@ -92,7 +101,21 @@ func SchedulHandler(contents *pb.ReqScheduleHandler) (*pb.ScheduledNodes, *hccer
 	reformatPBScheduleServerToModeQuota(pbServer, &userQuota)
 	logger.Logger.Println("Resolving: Schduler")
 	pbNodes, err := client.RC.GetNodeList()
+
 	modelNodes := reformatPBNodesToModelNodes(pbNodes)
+
+	sort.Slice(modelNodes, func(i, j int) bool {
+
+		a, _ := strconv.Atoi(modelNodes[i].BmcIP)
+		b, _ := strconv.Atoi(modelNodes[j].BmcIP)
+
+		return a < b
+	})
+
+	for _, args := range pbNodes {
+		fmt.Println(args.BmcIP, "\n", args.BmcMacAddr)
+	}
+	logger.Logger.Println("Flute : ", pbNodes, "\n", modelNodes)
 	if err != nil {
 		logger.Logger.Print(err)
 		goto ERROR
