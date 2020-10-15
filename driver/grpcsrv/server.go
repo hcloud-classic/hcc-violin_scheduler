@@ -62,7 +62,7 @@ func reformatPBNodesToModelNodes(pbNodes []pb.Node) []model.Node {
 	var nodes []model.Node
 
 	for _, args := range pbNodes {
-		if args.CPUCores > 0 || args.Memory > 0 || args.BmcIP != "" {
+		if args.CPUCores > 0 && args.Memory > 0 && args.BmcIP != "" {
 			nodes = append(nodes, model.Node{
 				ServerUUID: args.ServerUUID,
 				UUID:       args.UUID,
@@ -110,7 +110,7 @@ func SchedulHandler(contents *pb.ReqScheduleHandler) (*pb.ScheduledNodes, *hccer
 	// })
 
 	for _, args := range pbNodes {
-		fmt.Println(args.BmcIP, "\n", args.BmcMacAddr)
+		fmt.Println("pbNodes : ", args.BmcIP, "\n", args.BmcMacAddr)
 	}
 	logger.Logger.Println("Flute : ", pbNodes, "\n", modelNodes)
 	if err != nil {

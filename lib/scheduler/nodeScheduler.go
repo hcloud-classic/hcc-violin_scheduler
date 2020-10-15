@@ -66,14 +66,14 @@ func NodeListParser(nodes []model.Node, userquota model.Quota) ([]string, error)
 	tmparr := make([]*nodeInfo, 0, len(nodeT))
 	//*******Debug*******
 	// logger.Logger.Println("nodes : ", nodes)
-	// for _, eachNode := range nodeT {
-	// 	// logger.Logger.Println("a : ", a, "eachNode : ", eachNode)
-	// 	tmparr = append(tmparr, eachNode)
-	// }
+	for _, eachNode := range nodeT {
+		// logger.Logger.Println("a : ", a, "eachNode : ", eachNode)
+		tmparr = append(tmparr, eachNode)
+	}
 	// *******************
-	// for a, b := range tmparr {
-	// 	logger.Logger.Println("Comp :", a, *b)
-	// }
+	for a, b := range tmparr {
+		logger.Logger.Println("Comp :", a, *b)
+	}
 	//Sort bmp end of ip by Descending order
 	sort.Sort(Weighting(tmparr))
 
