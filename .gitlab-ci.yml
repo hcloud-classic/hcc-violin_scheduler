@@ -55,8 +55,8 @@ build:
     # - echo "Finished"
     - gmake
     - sudo /usr/sbin/service violin_scheduler stop
-    - sudo cp $PWD/violin_scheduler /bin/violin_scheduler
-    - sudo chmod 755 /bin/violin_scheduler
+    - sudo cp $PWD/violin-scheduler /bin/violin-scheduler
+    - sudo chmod 755 /bin/violin-scheduler
     - sudo /usr/sbin/service violin_scheduler start
     - echo "Finished"
 #  only:
