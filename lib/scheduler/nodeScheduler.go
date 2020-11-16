@@ -9,12 +9,10 @@ import (
 	"strings"
 )
 
-// If user want specified CPU,MEM or the number of nodes,
-// using the quotaSpec Structure at selecting algorithms
 type quotaSpec struct {
 	CPU        int
 	Mem        int
-	NumOfNodes int
+	NumOfNodes int // End of bmc ip address
 }
 
 type PathStatus struct {
@@ -28,7 +26,7 @@ type nodeInfo struct {
 	NodeUUID  string
 	CPU       int
 	Mem       int
-	NodeOrder int
+	NodeOrder int // End of bmc ip address
 }
 
 type keyValue struct {
@@ -46,7 +44,9 @@ func (a Weighting) Less(i, j int) bool { return a[i].NodeOrder < a[j].NodeOrder 
 func NodeListParser(nodes []model.Node, userquota model.Quota) ([]string, error) {
 	var nodecount int = 0
 	var nodeT = map[int]*nodeInfo{}
+	// logger.Logger.Println("nodeListParser (%d): \n", len(nodes), nodes)
 	for index := 0; index < len(nodes); index++ {
+		// Later, Please Check Selected node limit equal or less than nodecount
 		if nodes[index].Active == 0 && nodes[index].ServerUUID == "" {
 			SetValue(nodeT, nodes[index].UUID, (nodes[index].CPUCores)*2, nodes[index].Memory, nodecount, IPsplitToInt(nodes[index].BmcIP))
 			nodecount++
@@ -55,13 +55,14 @@ func NodeListParser(nodes []model.Node, userquota model.Quota) ([]string, error)
 	if userquota.NumberOfNodes == 0 {
 		userquota.NumberOfNodes = nodecount + 1
 	}
+	for i, words := range nodeT {
+		logger.Logger.Println(i, words.NodeUUID)
+	}
 
 	tmparr := make([]*nodeInfo, 0, len(nodeT))
 	for _, eachNode := range nodeT {
 		tmparr = append(tmparr, eachNode)
 	}
-
-	//Sort bmp end of ip by Descending order
 	sort.Sort(Weighting(tmparr))
 
 	seletedNodeList, err := SelectorInit(tmparr, userquota)
@@ -84,10 +85,12 @@ func IPsplitToInt(ip string) int {
 	return 0
 }
 
+// SetValue : set value
 func SetValue(nodemap map[int]*nodeInfo, UUID string, cpus int, mems int, Index int, bmcip int) {
 	nodemap[Index] = &nodeInfo{NodeUUID: UUID, CPU: cpus, Mem: mems, NodeOrder: bmcip}
 }
 
+// InputTest  : Test GraphQL argument
 func InputTest(nodemap []*nodeInfo) ([]string, error) {
 	var seletedNodeList []string
 	logger.Logger.Println("Appending Selected nodes")
@@ -98,9 +101,21 @@ func InputTest(nodemap []*nodeInfo) ([]string, error) {
 	return seletedNodeList, nil
 }
 
+// AllNodeClustering : All nodes clustering
+func AllNodeClustering(numberOfNodes int, ServerUUID string) {
+
+}
+
+func printMap(args map[int]*nodeInfo) {
+	for key, value := range args {
+		logger.Logger.Println("Key: [", key, "]  Value: [", *value, "]")
+	}
+}
+
 func SelectorInit(nodemap []*nodeInfo, userquota model.Quota) ([]string, error) {
 
-	tmpmap := BuildSliceInit(userquota.NumberOfNodes)
+	tmpmap := BuildSliceInit(len(nodemap))
+
 	checkPathStatus.CPU = userquota.CPU
 	checkPathStatus.Mem = userquota.Memory
 	checkPathStatus.Depth = userquota.NumberOfNodes
@@ -113,6 +128,7 @@ func SelectorInit(nodemap []*nodeInfo, userquota model.Quota) ([]string, error) 
 			nodeUUIDs = append(nodeUUIDs, nodemap[checkPathStatus.NavigatePath[index]].NodeUUID)
 		}
 	} else {
+
 		return nodeUUIDs, errors.New("Not Satisfing Node")
 	}
 	ResetGlobalVal()
@@ -140,9 +156,10 @@ func IsvaildQuota(cpu int, mem int, depth int) bool {
 	return false
 }
 
+// SearchPath : visit Abailable nodes and Check out that The  node is Satisfy with quota
 func SearchPath(nodemap []*nodeInfo, path *[]int, cpu int, mem int, depth int) {
 	if !checkPathStatus.IsFind {
-		for index := 0; index < len(*path); index++ {
+		for index := 0; index < len(nodemap); index++ {
 			if (*path)[index] != 1 && IsvaildQuota(cpu+nodemap[index].CPU, mem+nodemap[index].Mem, depth+1) {
 				(*path)[index] = 1
 				if IsoptimizedPath(cpu+nodemap[index].CPU, mem+nodemap[index].Mem, depth+1) {
@@ -155,12 +172,12 @@ func SearchPath(nodemap []*nodeInfo, path *[]int, cpu int, mem int, depth int) {
 				}
 				SearchPath(nodemap, path, cpu+nodemap[index].CPU, mem+nodemap[index].Mem, depth+1)
 				(*path)[index] = 0
+
 			}
 		}
 	}
 
 }
-
 func ResetGlobalVal() {
 	checkPathStatus.CPU = 0
 	checkPathStatus.Mem = 0

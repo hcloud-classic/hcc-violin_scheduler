@@ -37,6 +37,7 @@ func Prepare() bool {
 	returnValue := false
 
 	once.Do(func() {
+		// Create directory if not exist
 		if _, err = os.Stat("/var/log/" + LogName); os.IsNotExist(err) {
 			err = CreateDirIfNotExist("/var/log/" + LogName)
 			if err != nil {
