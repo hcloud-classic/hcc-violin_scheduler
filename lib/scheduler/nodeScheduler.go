@@ -48,7 +48,7 @@ func NodeListParser(nodes []model.Node, userquota model.Quota) ([]string, error)
 	for index := 0; index < len(nodes); index++ {
 		// Later, Please Check Selected node limit equal or less than nodecount
 		if nodes[index].Active == 0 && nodes[index].ServerUUID == "" {
-			SetValue(nodeT, nodes[index].UUID, (nodes[index].CPUCores)*2, nodes[index].Memory, nodecount, IPsplitToInt(nodes[index].BmcIP))
+			SetValue(nodeT, nodes[index].UUID, (nodes[index].CPUCores), nodes[index].Memory, nodecount, IPsplitToInt(nodes[index].BmcIP))
 			nodecount++
 		}
 	}
