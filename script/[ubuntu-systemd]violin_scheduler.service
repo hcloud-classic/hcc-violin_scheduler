@@ -1,0 +1,14 @@
+[Unit]
+Description=HCC Violin Scheduler Service
+
+[Service]
+Type=simple
+User=root
+ExecStart=/bin/violin-scheduler
+ExecStop=/bin/violin-scheduler
+Restart=on-failure
+RestartPreventExitStatus=100
+
+[Install]
+WantedBy=multi-user.target
+Alias=violin_scheduler.service
