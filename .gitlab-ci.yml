@@ -1,0 +1,63 @@
+stages:
+    - init
+    - test
+    - build
+    - run
+
+before_script:
+    - export GOROOT="/usr/local/go"
+    - export GOPATH="/home/gitlab-runner/go"
+    - export PATH="$PATH:$GOROOT/bin:$GOPATH/bin"
+
+copy_dir:
+    stage: init
+    script:
+    - make copy_dir
+
+unit_tests:
+  stage: test
+  script:
+    - make test
+
+race_detector:
+  stage: test
+  script:
+    - make race
+
+code_coverage:
+  stage: test
+  script:
+    - make coverage
+#  only:
+#  - master
+
+go_report:
+  stage: test
+  script:
+    - make goreport
+#  only:
+#  - master
+
+# lint_code:
+#  stage: test
+#  script:
+#    - make lint_dep
+#    - make lint
+
+build:
+  stage: build
+  script:
+    # - make
+    # - sudo ezjail-admin stop violin_scheduler
+    # - sudo cp $PWD/violin-scheduler /usr/jails/basejail/bin/
+    # - sudo chmod 755 /usr/jails/basejail/bin/violin-scheduler
+    # - sudo ezjail-admin start violin_scheduler &
+    # - echo "Finished"
+    - make
+    - sudo /usr/sbin/service violin_scheduler stop
+    - sudo cp $PWD/violin-scheduler /bin/violin-scheduler
+    - sudo chmod 755 /bin/violin-scheduler
+    - sudo /usr/sbin/service violin_scheduler start
+    - echo "Finished"
+#  only:
+#  - master
