@@ -136,7 +136,7 @@ func Parser() {
 		logger.Logger.Panicln(err)
 	}
 	parseFlute()
-	parseMysql()
+	// parseMysql()
 	// parseHTTP()
 	// parseRabbitMQ()
 	parseGrpc()
