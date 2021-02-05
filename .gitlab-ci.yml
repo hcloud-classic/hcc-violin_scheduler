@@ -8,11 +8,13 @@ before_script:
     - export GOROOT="/usr/local/go"
     - export GOPATH="/home/gitlab-runner/go"
     - export PATH="$PATH:$GOROOT/bin:$GOPATH/bin"
+    - export GOPROXY=direct
 
 copy_dir:
-    stage: init
-    script:
+  stage: init
+  script:
     - make copy_dir
+    - ln -sf $GOPATH/src/hcc/pb ../pb
 
 unit_tests:
   stage: test

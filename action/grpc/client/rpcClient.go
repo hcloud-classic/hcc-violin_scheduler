@@ -1,14 +1,14 @@
 package client
 
 import (
-	"hcc/violin-scheduler/action/grpc/pb/rpcflute"
+	"github.com/hcloud-classic/pb"
 )
 
 // "hcc/violin-schceduler/action/grpc/pb/rpcharp"
 
 // RPCClient : Struct type of gRPC clients
 type RPCClient struct {
-	flute rpcflute.FluteClient
+	flute pb.FluteClient
 	// harp  rpcharp.HarpClient
 }
 

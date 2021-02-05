@@ -2,9 +2,9 @@ package grpcsrv
 
 import (
 	"fmt"
+	hccerr "github.com/hcloud-classic/hcc_errors"
+	"github.com/hcloud-classic/pb"
 	"hcc/violin-scheduler/action/grpc/client"
-	pb "hcc/violin-scheduler/action/grpc/pb/rpcviolin_scheduler"
-	hccerr "hcc/violin-scheduler/lib/errors"
 	"hcc/violin-scheduler/lib/logger"
 	"hcc/violin-scheduler/lib/scheduler"
 	"hcc/violin-scheduler/model"
@@ -85,8 +85,8 @@ func reformatPBNodesToModelNodes(pbNodes []pb.Node) []model.Node {
 
 // }
 
-//SchedulHandler : Manipulate Volume Create
-func SchedulHandler(contents *pb.ReqScheduleHandler) (*pb.ScheduledNodes, *hccerr.HccErrorStack) {
+// ScheduleHandler : Manipulate Schedule Nodes
+func ScheduleHandler(contents *pb.ReqScheduleHandler) (*pb.ScheduledNodes, *hccerr.HccErrorStack) {
 	// var err error
 	// var uuid string
 	errStack := hccerr.NewHccErrorStack()
@@ -96,7 +96,7 @@ func SchedulHandler(contents *pb.ReqScheduleHandler) (*pb.ScheduledNodes, *hccer
 	var userQuota model.Quota
 	var selectedNodeList []string
 	reformatPBScheduleServerToModeQuota(pbServer, &userQuota)
-	logger.Logger.Println("Resolving: Schduler")
+	logger.Logger.Println("Resolving: Scheduler")
 	pbNodes, err := client.RC.GetNodeList()
 
 	modelNodes := reformatPBNodesToModelNodes(pbNodes)
@@ -149,10 +149,7 @@ func SchedulHandler(contents *pb.ReqScheduleHandler) (*pb.ScheduledNodes, *hccer
 	return reformatStringListToPBNodes(selectedNodeList), errStack.ConvertReportForm()
 
 ERROR:
-	errStack.Push(&hccerr.HccError{
-		ErrCode: hccerr.ShcedulerHandlerFaild,
-		ErrText: "VolumeHandler(): Failed to handle volume",
-	})
+	_ = errStack.Push(hccerr.NewHccError(hccerr.ShcedulerHandlerFaild, "ScheduleHandler(): Failed to schedule"))
 
 	return nil, errStack.ConvertReportForm()
 }
