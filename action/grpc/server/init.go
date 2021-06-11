@@ -1,7 +1,7 @@
 package server
 
 import (
-	pb "hcc/violin-scheduler/action/grpc/pb/rpcviolin_scheduler"
+	"github.com/hcloud-classic/pb"
 	"hcc/violin-scheduler/lib/config"
 	"hcc/violin-scheduler/lib/logger"
 	"net"

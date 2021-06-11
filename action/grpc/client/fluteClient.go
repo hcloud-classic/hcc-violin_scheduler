@@ -2,7 +2,7 @@ package client
 
 import (
 	"context"
-	"hcc/violin-scheduler/action/grpc/pb/rpcflute"
+	"github.com/hcloud-classic/pb"
 	"hcc/violin-scheduler/lib/config"
 	"hcc/violin-scheduler/lib/logger"
 	"strconv"
@@ -22,7 +22,7 @@ func initFlute() error {
 		return err
 	}
 
-	RC.flute = rpcflute.NewFluteClient(fluteConn)
+	RC.flute = pb.NewFluteClient(fluteConn)
 	logger.Logger.Println("gRPC flute client ready")
 
 	return nil
@@ -33,11 +33,11 @@ func closeFlute() {
 }
 
 // GetNode : Get infos of the node
-func (rc *RPCClient) GetNode(uuid string) (*rpcflute.Node, error) {
+func (rc *RPCClient) GetNode(uuid string) (*pb.Node, error) {
 	ctx, cancel := context.WithTimeout(context.Background(),
 		time.Duration(config.Flute.RequestTimeoutMs)*time.Millisecond)
 	defer cancel()
-	node, err := rc.flute.GetNode(ctx, &rpcflute.ReqGetNode{UUID: uuid})
+	node, err := rc.flute.GetNode(ctx, &pb.ReqGetNode{UUID: uuid})
 	if err != nil {
 		return nil, err
 	}
@@ -46,20 +46,20 @@ func (rc *RPCClient) GetNode(uuid string) (*rpcflute.Node, error) {
 }
 
 // GetNodeList : Get the list of nodes by server UUID.
-func (rc *RPCClient) GetNodeList() ([]rpcflute.Node, error) {
-	var nodeList []rpcflute.Node
+func (rc *RPCClient) GetNodeList() ([]pb.Node, error) {
+	var nodeList []pb.Node
 
 	ctx, cancel := context.WithTimeout(context.Background(),
 		time.Duration(config.Flute.RequestTimeoutMs)*time.Millisecond)
 	defer cancel()
-	pnodeList, err := rc.flute.GetNodeList(ctx, &rpcflute.ReqGetNodeList{Node: &rpcflute.Node{}})
+	pnodeList, err := rc.flute.GetNodeList(ctx, &pb.ReqGetNodeList{Node: &pb.Node{}})
 	if err != nil {
 		return nil, err
 	}
 
 	for _, pnode := range pnodeList.Node {
 		if pnode.UUID != "" {
-			nodeList = append(nodeList, rpcflute.Node{
+			nodeList = append(nodeList, pb.Node{
 				UUID:        pnode.UUID,
 				ServerUUID:  pnode.ServerUUID,
 				BmcMacAddr:  pnode.BmcMacAddr,

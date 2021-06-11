@@ -8,11 +8,16 @@ before_script:
     - export GOROOT="/usr/local/go"
     - export GOPATH="/home/gitlab-runner/go"
     - export PATH="$PATH:$GOROOT/bin:$GOPATH/bin"
+    - export GOPROXY=direct
+    - export Branch_Name="$CI_COMMIT_REF_NAME"
+    - export Serivce_Name="violin-scheduler"
+    - export Build_Path="/home/gitlab-runner/tmp_build"
 
 copy_dir:
-    stage: init
-    script:
+  stage: init
+  script:
     - make copy_dir
+    - ln -sf $GOPATH/src/hcc/pb ../pb
 
 unit_tests:
   stage: test
@@ -47,17 +52,20 @@ go_report:
 build:
   stage: build
   script:
-    # - make
-    # - sudo ezjail-admin stop violin_scheduler
-    # - sudo cp $PWD/violin-scheduler /usr/jails/basejail/bin/
-    # - sudo chmod 755 /usr/jails/basejail/bin/violin-scheduler
-    # - sudo ezjail-admin start violin_scheduler &
-    # - echo "Finished"
     - make
-    - sudo /usr/sbin/service violin_scheduler stop
-    - sudo cp $PWD/violin-scheduler /bin/violin-scheduler
-    - sudo chmod 755 /bin/violin-scheduler
-    - sudo /usr/sbin/service violin_scheduler start
+    - if [[ ! -d "$Build_Path/$Serivce_Name/$Branch_Name" ]]; then mkdir -p $Build_Path/$Serivce_Name/$Branch_Name;fi
+    - cp -f $PWD/$Serivce_Name $Build_Path/$Serivce_Name/$Branch_Name/
+    - echo "Build Complete"
+
+service_run:
+  stage: run
+  script:
+    - sudo /usr/sbin/service $Serivce_Name stop
+    - sudo cp $Build_Path/$Serivce_Name/$Branch_Name/$Serivce_Name /usr/local/bin/$Serivce_Name
+    - sudo chmod 755 /usr/local/bin/$Serivce_Name
+    - sudo /usr/sbin/service $Serivce_Name start
+    - sudo rm -rf $Build_Path/$Serivce_Name/$Branch_Name
     - echo "Finished"
-#  only:
-#  - master
+  only:
+    - master
+    - feature/dev
