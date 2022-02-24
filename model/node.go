@@ -27,6 +27,7 @@ type Nodes struct {
 type NodeNum struct {
 	Number int `json:"number"`
 }
+
 type ScheduledNodes struct {
 	NodeList []string `json:"node_uuid"`
 }

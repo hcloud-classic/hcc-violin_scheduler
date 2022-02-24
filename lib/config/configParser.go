@@ -6,9 +6,11 @@ import (
 	"github.com/Terry-Mao/goconf"
 )
 
-var conf = goconf.New()
-var config = schedulerConfig{}
-var err error
+var (
+	conf   = goconf.New()
+	config = schedulerConfig{}
+	err    error
+)
 
 func parseMysql() {
 	config.MysqlConfig = conf.Get("mysql")
@@ -43,7 +45,7 @@ func parseMysql() {
 	}
 }
 
-//Will be Deprecated
+// Will be Deprecated
 func parseHTTP() {
 	config.HTTPConfig = conf.Get("http")
 	if config.HTTPConfig == nil {

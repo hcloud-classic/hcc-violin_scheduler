@@ -1,6 +1,6 @@
 package model
 
-//Quota : asd
+// Quota : asd
 type Quota struct {
 	ServerUUID    string
 	CPU           int

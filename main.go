@@ -1,11 +1,10 @@
 package main
 
 import (
+	"fmt"
 	"hcc/violin-scheduler/action/grpc/server"
 	schedulerEnd "hcc/violin-scheduler/end"
 	schedulerInit "hcc/violin-scheduler/init"
-
-	"fmt"
 	"os"
 	"os/signal"
 	"syscall"
@@ -28,5 +27,4 @@ func main() {
 		os.Exit(0)
 	}()
 	server.Init()
-
 }

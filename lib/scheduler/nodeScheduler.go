@@ -22,6 +22,7 @@ type PathStatus struct {
 	IsFind       bool
 	NavigatePath []int
 }
+
 type nodeInfo struct {
 	NodeUUID  string
 	CPU       int
@@ -43,7 +44,7 @@ func (a Weighting) Less(i, j int) bool { return a[i].NodeOrder < a[j].NodeOrder 
 
 func NodeListParser(nodes []model.Node, userquota model.Quota) ([]string, error) {
 	var nodecount int = 0
-	var nodeT = map[int]*nodeInfo{}
+	nodeT := map[int]*nodeInfo{}
 	// logger.Logger.Println("nodeListParser (%d): \n", len(nodes), nodes)
 	for index := 0; index < len(nodes); index++ {
 		// Later, Please Check Selected node limit equal or less than nodecount
@@ -103,7 +104,6 @@ func InputTest(nodemap []*nodeInfo) ([]string, error) {
 
 // AllNodeClustering : All nodes clustering
 func AllNodeClustering(numberOfNodes int, ServerUUID string) {
-
 }
 
 func printMap(args map[int]*nodeInfo) {
@@ -113,7 +113,6 @@ func printMap(args map[int]*nodeInfo) {
 }
 
 func SelectorInit(nodemap []*nodeInfo, userquota model.Quota) ([]string, error) {
-
 	tmpmap := BuildSliceInit(len(nodemap))
 
 	checkPathStatus.CPU = userquota.CPU
@@ -128,12 +127,12 @@ func SelectorInit(nodemap []*nodeInfo, userquota model.Quota) ([]string, error) 
 			nodeUUIDs = append(nodeUUIDs, nodemap[checkPathStatus.NavigatePath[index]].NodeUUID)
 		}
 	} else {
-
 		return nodeUUIDs, errors.New("Not Satisfing Node")
 	}
 	ResetGlobalVal()
 	return nodeUUIDs, nil
 }
+
 func BuildSliceInit(size int) *[]int {
 	dp := make([]int, size)
 	for i := 0; i < len(dp); i++ {
@@ -149,6 +148,7 @@ func IsoptimizedPath(cpu int, mem int, depth int) bool {
 	}
 	return false
 }
+
 func IsvaildQuota(cpu int, mem int, depth int) bool {
 	if (cpu <= checkPathStatus.CPU && mem <= checkPathStatus.Mem && depth <= checkPathStatus.Depth) || (checkPathStatus.CPU == 0 && checkPathStatus.Mem == 0 && depth <= checkPathStatus.Depth) {
 		return true
@@ -176,8 +176,8 @@ func SearchPath(nodemap []*nodeInfo, path *[]int, cpu int, mem int, depth int) {
 			}
 		}
 	}
-
 }
+
 func ResetGlobalVal() {
 	checkPathStatus.CPU = 0
 	checkPathStatus.Mem = 0

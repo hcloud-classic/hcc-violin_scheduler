@@ -7,7 +7,6 @@ import (
 
 // MainInit : Main initialization function
 func MainInit() error {
-
 	err := loggerInit()
 	if err != nil {
 		return err
